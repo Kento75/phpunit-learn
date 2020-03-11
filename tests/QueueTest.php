@@ -5,30 +5,61 @@ use PHPUnit\Framework\TestCase;
 
 class QueueTest extends TestCase
 {
+    protected static $queue;
+
+    public static function setUpBeforeClass(): void
+    {
+        static::$queue = new Queue();
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        static::$queue = null;
+    }
 
     public function testNewQueueIsEmpty()
     {
-        $queue = new Queue;
-        $this->assertEquals(0, $queue->getCount());
+        $this->assertEquals(0, static::$queue->getCount());
     }
 
-    /**
-     * @depends testNewQueueIsEmpty
-     */
-    public function testAnItemIsAddedToTheQueue(Queue $queue)
+    public function testAnItemIsAddedToTheQueue()
     {
-        $queue->push('green');
-
-        $this->assertEquals(1, $queue->getCount());
+            static::$queue->push('green');
+        $this->assertEquals(1, static::$queue->getCount());
     }
 
-    /**
-     * @depends testAnItemIsAddedToTheQueue
-     */
-    public function testAnItemIsRemovedFromTheQueue(Queue $queue)
+    public function testAnItemIsRemovedFromTheQueue()
     {
-        $queue->pop();
+        static::$queue->pop();
+        $this->assertEquals(0, static::$queue->getCount());
+    }
 
-        $this->assertEquals(0, $queue->getCount());
+    public function testAnItemIsRemovedFromTheFrontOfTheQueue()
+    {
+        static::$queue->push('first');
+        static::$queue->push('second');
+
+        $this->assertEquals('first', static::$queue->pop());
+    }
+
+    public function testMaxNumberOfItemsCanBeAdded()
+    {
+        static::$queue = new Queue();
+        for($i = 0; $i < Queue::MAX_ITEMS; $i++) {
+            static::$queue->push($i);
+        }
+
+        $this->assertEquals(Queue::MAX_ITEMS, static::$queue->getCount());
+    }
+
+    public function testeExceptionThrowWhenAddingAnItemToFullQueue()
+    {
+        static::$queue = new Queue();
+        for($i = 0; $i < Queue::MAX_ITEMS; $i++) {
+            static::$queue->push($i);
+        }
+        $this->expectException(QueueException::class);
+        $this->expectExceptionMessage("Queue is full");
+        static::$queue->push("full");
     }
 }
