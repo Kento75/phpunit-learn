@@ -7,6 +7,8 @@ class User
 
     private $surname;
 
+    protected $mailer;
+
     public function __construct($first_name, $surname)
     {
         $this->surname = $surname;
@@ -16,5 +18,15 @@ class User
     public function getFullName()
     {
         return "{$this->first_name} {$this->surname}";
+    }
+
+    public function notify($message)
+    {
+        return $this->mailer->sendMessage($this->email, $message);
+    }
+
+    public function setMailer(Mailer $mailer)
+    {
+        $this->mailer = $mailer;
     }
 }
