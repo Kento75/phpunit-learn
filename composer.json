@@ -6,6 +6,11 @@
             "email": "kento2github@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "": "src"
+        }
+    },
     "scripts": {
         "test": "phpunit"
     },

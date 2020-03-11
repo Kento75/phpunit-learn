@@ -11,4 +11,9 @@ class FunctionTest extends TestCase
         $this->assertEquals(4, add(2, 2));
         $this->assertEquals(7, add(5, 2));
     }
+
+    public function testAddDoesNotReturnTheIncorrectSum()
+    {
+        $this->assertNotEquals(5, add(2, 34));
+    }
 }
