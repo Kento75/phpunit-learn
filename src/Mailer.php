@@ -1,6 +1,5 @@
 <?php
 
-
 class Mailer
 {
 
@@ -18,6 +17,17 @@ class Mailer
 
         sleep(3);
         echo "send '$email' . to '$message'";
+
+        return true;
+    }
+
+    public function send(string $email, string $message)
+    {
+        if(empty($email)) {
+            throw new InvalidArgumentException;
+        }
+
+        echo "Send '$message' to $email";
 
         return true;
     }
